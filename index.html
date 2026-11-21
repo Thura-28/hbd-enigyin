@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Happy Birthday Eingyin Moe ❄️</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', sans-serif;
+            background: radial-gradient(circle at 25% 15%, #f0f7ff 0%, #dbeafe 40%, #c7d2fe 80%, #a5b4fc 100%);
+            background-attachment: fixed;
+            min-height: 100dvh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+            padding: max(20px, env(safe-area-inset-top)) 18px max(24px, env(safe-area-inset-bottom));
+        }
+
+        /* ---------- 3D FLOATING ELEMENTS & FALLING SNOW ---------- */
+        .floating-layer {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .float-item {
+            position: absolute;
+            bottom: -100px;
+            will-change: transform;
+            animation: floatUp linear infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .float-item img,
+        .falling-snowflake img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 8px 16px rgba(30, 58, 138, 0.14));
+        }
+
+        .layer-back {
+            filter: blur(1.5px);
+            opacity: 0.55;
+        }
+
+        .layer-front {
+            opacity: 0.9;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) translateX(0) rotate(-8deg) scale(0.95);
+                opacity: 0;
+            }
+            10% {
+                opacity: var(--item-opacity, 0.85);
+            }
+            35% {
+                transform: translateY(-38vh) translateX(22px) rotate(10deg) scale(1);
+            }
+            70% {
+                transform: translateY(-78vh) translateX(-24px) rotate(-8deg) scale(1.02);
+            }
+            90% {
+                opacity: var(--item-opacity, 0.85);
+            }
+            100% {
+                transform: translateY(-120dvh) translateX(14px) rotate(6deg) scale(0.96);
+                opacity: 0;
+            }
+        }
+
+        @keyframes floatUpSwirl {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: var(--item-opacity, 0.85);
+            }
+            30% {
+                transform: translateY(-32vh) translateX(-28px) rotate(-14deg);
+            }
+            65% {
+                transform: translateY(-72vh) translateX(30px) rotate(14deg);
+            }
+            90% {
+                opacity: var(--item-opacity, 0.85);
+            }
+            100% {
+                transform: translateY(-120dvh) translateX(-16px) rotate(-6deg);
+                opacity: 0;
+            }
+        }
+
+        .snow-dot {
+            position: absolute;
+            top: -20px;
+            background: rgba(255, 255, 255, 0.92);
+            border-radius: 50%;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
+            will-change: transform;
+            animation: snowFall linear infinite;
+        }
+
+        .falling-snowflake {
+            position: absolute;
+            top: -50px;
+            will-change: transform;
+            animation: snowFallRotate linear infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes snowFall {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            12% {
+                opacity: var(--snow-opacity, 0.85);
+            }
+            50% {
+                transform: translateY(52dvh) translateX(var(--sway-x, 20px));
+            }
+            88% {
+                opacity: var(--snow-opacity, 0.85);
+            }
+            100% {
+                transform: translateY(108dvh) translateX(calc(var(--sway-x, 20px) * -0.5));
+                opacity: 0;
+            }
+        }
+
+        @keyframes snowFallRotate {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            12% {
+                opacity: var(--snow-opacity, 0.85);
+            }
+            50% {
+                transform: translateY(52dvh) translateX(var(--sway-x, 25px)) rotate(180deg);
+            }
+            88% {
+                opacity: var(--snow-opacity, 0.85);
+            }
+            100% {
+                transform: translateY(108dvh) translateX(calc(var(--sway-x, 25px) * -0.6)) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* ---------- CONTAINER & GLASSMORPHISM CARD ---------- */
+        .container {
+            width: 100%;
+            max-width: 420px;
+            z-index: 10;
+            position: relative;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.74);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border-radius: 34px;
+            box-shadow:
+                0 25px 50px -12px rgba(30, 58, 138, 0.22),
+                0 0 0 1px rgba(255, 255, 255, 0.85) inset;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+                        box-shadow 0.45s ease;
+            position: relative;
+            user-select: none;
+        }
+
+        .card:not(.open):hover {
+            transform: translateY(-5px);
+            box-shadow:
+                0 32px 60px -14px rgba(30, 58, 138, 0.28),
+                0 0 0 1px rgba(255, 255, 255, 0.95) inset;
+        }
+
+        .card.open {
+            cursor: default;
+            background: rgba(255, 255, 255, 0.84);
+        }
+
+        /* ---------- CARD COVER ---------- */
+        .card-cover {
+            background: linear-gradient(145deg, rgba(147, 197, 253, 0.88) 0%, rgba(165, 180, 252, 0.88) 50%, rgba(196, 181, 253, 0.88) 100%);
+            padding: 42px 26px 36px;
+            text-align: center;
+            position: relative;
+            transition: all 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .card.open .card-cover {
+            padding: 22px 24px 18px;
+            background: linear-gradient(145deg, rgba(96, 165, 250, 0.92) 0%, rgba(129, 140, 248, 0.92) 100%);
+        }
+
+        .cover-3d-icon {
+            width: 78px;
+            height: 78px;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), width 0.5s, height 0.5s;
+            filter: drop-shadow(0 10px 18px rgba(30, 58, 138, 0.2));
+        }
+
+        .cover-3d-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .card.open .cover-3d-icon {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 4px;
+            transform: rotate(6deg);
+        }
+
+        .cover-title {
+            color: #ffffff;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            text-shadow: 0 2px 12px rgba(30, 58, 138, 0.22);
+            transition: font-size 0.4s ease;
+        }
+
+        .card.open .cover-title {
+            font-size: 20px;
+        }
+
+        .cover-subtitle {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 14.5px;
+            margin-top: 6px;
+            font-weight: 500;
+            transition: opacity 0.25s, height 0.3s, margin 0.3s;
+        }
+
+        .card.open .cover-subtitle {
+            opacity: 0;
+            height: 0;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .age-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.42);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: #1e3a8a;
+            font-size: 13.5px;
+            font-weight: 700;
+            padding: 6px 16px;
+            border-radius: 30px;
+            margin-top: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.08);
+            transition: opacity 0.25s, height 0.3s, margin 0.3s, padding 0.3s;
+        }
+
+        .card.open .age-badge {
+            opacity: 0;
+            height: 0;
+            margin: 0;
+            padding: 0;
+            border: none;
+            overflow: hidden;
+        }
+
+        /* ---------- CARD BODY ---------- */
+        .card-body {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+                        opacity 0.5s ease,
+                        padding 0.5s ease;
+            padding: 0 26px;
+        }
+
+        .card.open .card-body {
+            max-height: 1000px;
+            opacity: 1;
+            padding: 24px 26px 28px;
+        }
+
+        .to {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(219, 234, 254, 0.85);
+            color: #1e40af;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 6px 16px;
+            border-radius: 30px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .message-wrapper {
+            position: relative;
+            margin-bottom: 18px;
+            user-select: text;
+            -webkit-user-select: text;
+        }
+
+        .message-placeholder {
+            visibility: hidden;
+            pointer-events: none;
+            font-size: 14.8px;
+            line-height: 1.66;
+            font-weight: 450;
+        }
+
+        .message-placeholder p,
+        .message p {
+            margin-bottom: 12px;
+            word-break: break-word;
+        }
+
+        .message-placeholder p:last-child,
+        .message p:last-child {
+            margin-bottom: 0;
+        }
+
+        .message {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            color: #1e293b;
+            font-size: 14.8px;
+            line-height: 1.66;
+            font-weight: 450;
+        }
+
+        .caret {
+            display: inline-block;
+            width: 2px;
+            height: 1.05em;
+            background-color: #3b82f6;
+            margin-left: 2px;
+            vertical-align: -2px;
+            animation: blink 0.8s step-end infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .wish-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(224, 242, 254, 0.9);
+            color: #0369a1;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 7px 16px;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.85);
+            opacity: 0;
+            transform: translateY(6px);
+            transition: opacity 0.6s ease 0.2s, transform 0.6s ease 0.2s;
+        }
+
+        .card.open .wish-badge {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .signature {
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1.5px dashed rgba(147, 197, 253, 0.8);
+            text-align: right;
+            color: #1e40af;
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 1.55;
+            opacity: 0;
+            transform: translateY(6px);
+            transition: opacity 0.6s ease 0.35s, transform 0.6s ease 0.35s;
+        }
+
+        .card.open .signature {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ---------- CLOSE BUTTON ---------- */
+        .close-wrap {
+            display: flex;
+            justify-content: center;
+            margin-top: 18px;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(-6px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .close-wrap.visible {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        .close-btn {
+            text-align: center;
+            color: #1e3a8a;
+            font-size: 13.5px;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 10px 24px;
+            border-radius: 40px;
+            box-shadow: 0 8px 20px rgba(30, 58, 138, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.85) inset;
+            transition: transform 0.2s ease, background 0.2s ease;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .close-btn:active {
+            transform: scale(0.96);
+            background: rgba(255, 255, 255, 0.94);
+        }
+
+        canvas#confettiCanvas {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        .card:focus-visible,
+        .close-btn:focus-visible {
+            outline: 3px solid #60a5fa;
+            outline-offset: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-layer" id="floatingLayer"></div>
+
+    <div class="container">
+        <div class="card" id="card" tabindex="0" role="button" aria-label="Birthday card for Eingyin Moe. Tap to open.">
+            <div class="card-cover">
+                <div class="cover-3d-icon">
+                    <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Food/Birthday%20Cake.png"
+                         alt="Birthday Cake"
+                         onerror="this.outerHTML='<span style=\'font-size:54px\'>🎂</span>'">
+                </div>
+                <div class="cover-title">Happy Birthday</div>
+                <div class="cover-subtitle">Tap the card to open</div>
+                <div class="age-badge" id="ageBadge">❄️ Happy 25th birthday!</div>
+            </div>
+
+            <div class="card-body">
+                <div class="to">❄️ For Eingyin Moe</div>
+
+                <div class="message-wrapper">
+                    <div class="message-placeholder" id="messagePlaceholder" aria-hidden="true"></div>
+                    <div class="message" id="typedMessage"></div>
+                </div>
+
+                <div class="wish-badge">
+                    ✨ Wishing you peace & happiness always
+                </div>
+
+                <div class="signature">
+                    Warmest wishes,<br>
+                    Someone who still remembers ❄️
+                </div>
+            </div>
+        </div>
+
+        <div class="close-wrap" id="closeWrap">
+            <div class="close-btn" id="closeBtn" tabindex="0" role="button" aria-label="Close card">
+                ✨ Close card
+            </div>
+        </div>
+    </div>
+
+    <canvas id="confettiCanvas"></canvas>
+
+    <script>
+        (function () {
+            const card = document.getElementById('card');
+            const closeWrap = document.getElementById('closeWrap');
+            const closeBtn = document.getElementById('closeBtn');
+            const confettiCanvas = document.getElementById('confettiCanvas');
+            const ctx = confettiCanvas.getContext('2d');
+            const typedMessageEl = document.getElementById('typedMessage');
+            const placeholderEl = document.getElementById('messagePlaceholder');
+            const ageBadge = document.getElementById('ageBadge');
+
+            let animationFrame = null;
+            let confettiActive = false;
+            let confettiTimeout = null;
+            let particles = [];
+
+            // ---------- AUTO AGE CALCULATION ----------
+            function calculateAge() {
+                const birthDate = new Date(2001, 10, 21); // 21 Nov 2001
+                const today = new Date();
+                let age = today.getFullYear() - birthDate.getFullYear();
+                const monthDiff = today.getMonth() - birthDate.getMonth();
+                if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                    age--;
+                }
+                return age;
+            }
+
+            function getOrdinal(n) {
+                const s = ["th", "st", "nd", "rd"];
+                const v = n % 100;
+                return n + (s[(v - 20) % 10] || s[v] || s[0]);
+            }
+
+            function updateAge() {
+                const age = calculateAge();
+                ageBadge.textContent = `❄️ Happy ${getOrdinal(age)} birthday!`;
+            }
+            updateAge();
+
+            // ---------- CUSTOM HEARTFELT MESSAGE ----------
+            const fullMessage = [
+                "Happy 25th birthday! I’m not entirely sure if you’re turning 25 today, but one thing I’ve always remembered is that your birthday comes just a week before mine.",
+                "Even though we’ve drifted apart and moved on into different chapters and relationships of our own, I still find myself thinking of you from time to time.",
+                "Wishing you a truly happy birthday. May this new year bring you genuine peace, happiness, and everything your heart hopes for. Take good care of yourself."
+            ];
+
+            fullMessage.forEach(line => {
+                const p = document.createElement('p');
+                p.textContent = line;
+                placeholderEl.appendChild(p);
+            });
+
+            let typingTimer = null;
+            let openDelayTimer = null;
+
+            function resetTypewriter() {
+                if (openDelayTimer) clearTimeout(openDelayTimer);
+                if (typingTimer) clearTimeout(typingTimer);
+                openDelayTimer = null;
+                typingTimer = null;
+                typedMessageEl.innerHTML = '';
+            }
+
+            function startTypewriter() {
+                resetTypewriter();
+                typedMessageEl.innerHTML = '';
+
+                const paragraphEls = fullMessage.map(() => {
+                    const p = document.createElement('p');
+                    typedMessageEl.appendChild(p);
+                    return p;
+                });
+
+                const caret = document.createElement('span');
+                caret.className = 'caret';
+                paragraphEls[0].appendChild(caret);
+
+                let currentP = 0;
+                let currentChar = 0;
+
+                function typeNext() {
+                    if (currentP >= fullMessage.length) {
+                        caret.remove();
+                        typingTimer = null;
+                        return;
+                    }
+
+                    const text = fullMessage[currentP];
+                    const pEl = paragraphEls[currentP];
+
+                    if (currentChar < text.length) {
+                        if (caret.parentNode !== pEl) {
+                            pEl.appendChild(caret);
+                        }
+                        caret.insertAdjacentText('beforebegin', text[currentChar]);
+                        currentChar++;
+
+                        const char = text[currentChar - 1];
+                        let delay = 58;
+                        if (char === ' ') delay = 35;
+                        if (char === ',') delay = 210;
+                        if (char === '.' || char === '!' || char === '?') delay = 350;
+                        typingTimer = setTimeout(typeNext, delay);
+                    } else {
+                        currentP++;
+                        currentChar = 0;
+                        if (currentP < fullMessage.length) {
+                            typingTimer = setTimeout(typeNext, 620);
+                        } else {
+                            caret.remove();
+                            typingTimer = null;
+                        }
+                    }
+                }
+
+                typeNext();
+            }
+
+            // ---------- 3D FLOATING EMOJIS & HEAVY SNOWFALL ----------
+            function createFloatingScene() {
+                const container = document.getElementById('floatingLayer');
+                const baseUrl = "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/";
+                const snowflakeSrc = baseUrl + "Travel%20and%20places/Snowflake.png";
+
+                const fluentItems = [
+                    { src: baseUrl + "Activities/Balloon.png", fallback: "🎈" },
+                    { src: baseUrl + "Activities/Wrapped%20Gift.png", fallback: "🎁" },
+                    { src: baseUrl + "Activities/Sparkles.png", fallback: "✨" },
+                    { src: baseUrl + "Travel%20and%20places/Glowing%20Star.png", fallback: "🌟" },
+                    { src: baseUrl + "Travel%20and%20places/Snowman%20Without%20Snow.png", fallback: "⛄" },
+                    { src: baseUrl + "Objects/Gem%20Stone.png", fallback: "💎" }
+                ];
+
+                for (let i = 0; i < 12; i++) {
+                    const itemData = fluentItems[Math.floor(Math.random() * fluentItems.length)];
+                    const el = document.createElement('div');
+                    const isForeground = Math.random() > 0.45;
+
+                    el.className = `float-item ${isForeground ? 'layer-front' : 'layer-back'}`;
+
+                    const size = isForeground ? (28 + Math.random() * 12) : (18 + Math.random() * 8);
+                    const img = document.createElement('img');
+                    img.src = itemData.src;
+                    img.alt = "";
+                    img.loading = "lazy";
+                    img.onerror = function() {
+                        el.textContent = itemData.fallback;
+                        el.style.fontSize = size + 'px';
+                    };
+                    el.appendChild(img);
+
+                    el.style.width = size + 'px';
+                    el.style.height = size + 'px';
+                    el.style.left = (Math.random() * 94) + '%';
+
+                    const duration = isForeground ? (15 + Math.random() * 7) : (20 + Math.random() * 9);
+                    el.style.animationName = Math.random() > 0.5 ? 'floatUp' : 'floatUpSwirl';
+                    el.style.animationDuration = duration + 's';
+                    el.style.animationDelay = (Math.random() * 16 - 8) + 's';
+                    el.style.setProperty('--item-opacity', isForeground ? '0.88' : '0.5');
+
+                    container.appendChild(el);
+                }
+
+                for (let i = 0; i < 65; i++) {
+                    const snow = document.createElement('div');
+                    snow.className = 'snow-dot';
+                    const isClose = Math.random() > 0.35;
+                    const dotSize = isClose ? (4 + Math.random() * 4.5) : (2 + Math.random() * 2.5);
+
+                    snow.style.width = dotSize + 'px';
+                    snow.style.height = dotSize + 'px';
+                    snow.style.left = (Math.random() * 100) + '%';
+                    snow.style.animationDuration = (isClose ? (6 + Math.random() * 6) : (11 + Math.random() * 8)) + 's';
+                    snow.style.animationDelay = (Math.random() * 12 - 6) + 's';
+                    snow.style.setProperty('--snow-opacity', isClose ? '0.92' : '0.55');
+                    snow.style.setProperty('--sway-x', ((Math.random() - 0.5) * 50) + 'px');
+                    if (!isClose) snow.style.filter = 'blur(1px)';
+
+                    container.appendChild(snow);
+                }
+
+                for (let i = 0; i < 16; i++) {
+                    const flake = document.createElement('div');
+                    const isForeground = Math.random() > 0.4;
+                    flake.className = `falling-snowflake ${isForeground ? 'layer-front' : 'layer-back'}`;
+
+                    const flakeSize = isForeground ? (22 + Math.random() * 14) : (14 + Math.random() * 8);
+                    const img = document.createElement('img');
+                    img.src = snowflakeSrc;
+                    img.alt = "";
+                    img.loading = "lazy";
+                    img.onerror = function() {
+                        flake.textContent = "❄️";
+                        flake.style.fontSize = flakeSize + 'px';
+                    };
+                    flake.appendChild(img);
+
+                    flake.style.width = flakeSize + 'px';
+                    flake.style.height = flakeSize + 'px';
+                    flake.style.left = (Math.random() * 96) + '%';
+                    flake.style.animationDuration = (isForeground ? (9 + Math.random() * 6) : (14 + Math.random() * 7)) + 's';
+                    flake.style.animationDelay = (Math.random() * 14 - 7) + 's';
+                    flake.style.setProperty('--snow-opacity', isForeground ? '0.9' : '0.55');
+                    flake.style.setProperty('--sway-x', ((Math.random() - 0.5) * 60) + 'px');
+
+                    container.appendChild(flake);
+                }
+            }
+            createFloatingScene();
+
+            // ---------- HIGH-DPI CANVAS FOR IPHONE RETINA ----------
+            function resizeCanvas() {
+                const dpr = window.devicePixelRatio || 1;
+                confettiCanvas.width = window.innerWidth * dpr;
+                confettiCanvas.height = window.innerHeight * dpr;
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            }
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+
+            // ---------- WINTER METALLIC CONFETTI ----------
+            class ConfettiPiece {
+                constructor(w, h) {
+                    this.x = Math.random() * w;
+                    this.y = Math.random() * h * 0.35 - 50;
+                    this.size = 5 + Math.random() * 7;
+                    this.speedY = 1.8 + Math.random() * 3.2;
+                    this.speedX = (Math.random() - 0.5) * 2.5;
+                    this.rotation = Math.random() * 360;
+                    this.rotSpeed = (Math.random() - 0.5) * 7;
+                    this.type = Math.floor(Math.random() * 3);
+                    const colors = [
+                        '#93c5fd', '#bfdbfe', '#c7d2fe', '#ddd6fe',
+                        '#e0f2fe', '#ffffff', '#e2e8f0', '#a5b4fc', '#7dd3fc'
+                    ];
+                    this.color = colors[Math.floor(Math.random() * colors.length)];
+                    this.opacity = 0.92;
+                }
+
+                update(h) {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+                    this.rotation += this.rotSpeed;
+                    return this.y < h + 50;
+                }
+
+                draw(ctx) {
+                    ctx.save();
+                    ctx.translate(this.x, this.y);
+                    ctx.rotate(this.rotation * Math.PI / 180);
+                    ctx.globalAlpha = this.opacity;
+                    ctx.fillStyle = this.color;
+
+                    if (this.type === 0) {
+                        ctx.fillRect(-this.size / 2, -this.size / 4, this.size, this.size / 2);
+                    } else if (this.type === 1) {
+                        ctx.beginPath();
+                        ctx.arc(0, 0, this.size / 2.2, 0, Math.PI * 2);
+                        ctx.fill();
+                    } else {
+                        ctx.beginPath();
+                        ctx.moveTo(0, -this.size / 2);
+                        ctx.lineTo(this.size / 2, this.size / 2);
+                        ctx.lineTo(-this.size / 2, this.size / 2);
+                        ctx.closePath();
+                        ctx.fill();
+                    }
+                    ctx.restore();
+                }
+            }
+
+            function startConfetti() {
+                if (animationFrame) cancelAnimationFrame(animationFrame);
+                if (confettiTimeout) clearTimeout(confettiTimeout);
+
+                confettiActive = true;
+                particles = [];
+                const w = window.innerWidth;
+                const h = window.innerHeight;
+
+                for (let i = 0; i < 160; i++) {
+                    particles.push(new ConfettiPiece(w, h));
+                }
+
+                function draw() {
+                    ctx.clearRect(0, 0, w, h);
+                    let alive = false;
+                    for (let i = 0; i < particles.length; i++) {
+                        const p = particles[i];
+                        if (p.update(h)) {
+                            p.draw(ctx);
+                            alive = true;
+                        }
+                    }
+                    if (alive && confettiActive) {
+                        animationFrame = requestAnimationFrame(draw);
+                    } else {
+                        confettiActive = false;
+                        ctx.clearRect(0, 0, w, h);
+                    }
+                }
+                draw();
+
+                confettiTimeout = setTimeout(() => {
+                    confettiActive = false;
+                }, 7000);
+            }
+
+            // ---------- OPEN / CLOSE CONTROLS ----------
+            function openCard() {
+                if (card.classList.contains('open')) return;
+                card.classList.add('open');
+                card.removeAttribute('role');
+                closeWrap.classList.add('visible');
+
+                updateAge();
+                resetTypewriter();
+                openDelayTimer = setTimeout(() => {
+                    startTypewriter();
+                }, 320);
+
+                startConfetti();
+            }
+
+            function closeCard() {
+                if (!card.classList.contains('open')) return;
+                card.classList.remove('open');
+                card.setAttribute('role', 'button');
+                closeWrap.classList.remove('visible');
+                resetTypewriter();
+            }
+
+            card.addEventListener('click', () => {
+                if (!card.classList.contains('open')) {
+                    openCard();
+                }
+            });
+
+            closeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                closeCard();
+            });
+
+            card.addEventListener('keydown', (e) => {
+                if ((e.key === 'Enter' || e.key === ' ') && !card.classList.contains('open')) {
+                    e.preventDefault();
+                    openCard();
+                }
+            });
+
+            closeBtn.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    closeCard();
+                }
+            });
+        })();
+    </script>
+</body>
+</html>
