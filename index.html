@@ -288,6 +288,47 @@
             border: 1px solid rgba(255, 255, 255, 0.7);
             box-shadow: 0 4px 12px rgba(30, 58, 138, 0.08);
             transition: opacity 0.25s, height 0.3s, margin 0.3s, padding 0.3s;
+            position: relative;
+            animation: badgeTextGlow 3.6s ease-in-out infinite;
+        }
+
+        /* Soft ice-blue / white aura. Only opacity is animated (GPU-friendly). */
+        .age-badge::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            pointer-events: none;
+            box-shadow:
+                0 0 12px 1px rgba(186, 230, 253, 0.85),
+                0 0 26px 4px rgba(255, 255, 255, 0.6);
+            opacity: 0.3;
+            animation: badgeAuraPulse 3.6s ease-in-out infinite;
+        }
+
+        @keyframes badgeAuraPulse {
+            0%, 100% { opacity: 0.3; }
+            50%      { opacity: 0.95; }
+        }
+
+        @keyframes badgeTextGlow {
+            0%, 100% { text-shadow: 0 0 3px rgba(255, 255, 255, 0.25); }
+            50%      { text-shadow: 0 0 8px rgba(255, 255, 255, 0.95), 0 0 14px rgba(186, 230, 253, 0.7); }
+        }
+
+        .card.open .age-badge,
+        .card.open .age-badge::after {
+            animation: none;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .age-badge,
+            .age-badge::after {
+                animation: none;
+            }
+            .age-badge::after {
+                opacity: 0.6;
+            }
         }
 
         .card.open .age-badge {
@@ -361,7 +402,7 @@
             top: 0;
             left: 0;
             right: 0;
-            color: #1e293b;
+            color: #1e3a8a;
             font-size: 14.8px;
             line-height: 1.66;
             font-weight: 450;
@@ -371,7 +412,7 @@
             display: inline-block;
             width: 2px;
             height: 1.05em;
-            background-color: #3b82f6;
+            background-color: #4f46e5;
             margin-left: 2px;
             vertical-align: -2px;
             animation: blink 0.8s step-end infinite;
@@ -380,6 +421,11 @@
         @keyframes blink {
             0%, 100% { opacity: 1; }
             50% { opacity: 0; }
+        }
+
+        /* Key phrases in the typewriter message (color only, so layout matches the placeholder) */
+        .message .hl {
+            color: #4f46e5;
         }
 
         .wish-badge {
@@ -394,13 +440,17 @@
             border-radius: 40px;
             border: 1px solid rgba(255, 255, 255, 0.85);
             opacity: 0;
-            transform: translateY(6px);
-            transition: opacity 0.6s ease 0.2s, transform 0.6s ease 0.2s;
+            transform: translateY(10px) scale(0.96);
+            filter: blur(4px);
+            transition: opacity 0.25s ease, transform 0.25s ease, filter 0.25s ease;
         }
 
-        .card.open .wish-badge {
+        /* Revealed only after the typewriter finishes */
+        .card.open.wish-visible .wish-badge {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateY(0) scale(1);
+            filter: blur(0);
+            transition: opacity 1s ease, transform 1s cubic-bezier(0.22, 1, 0.36, 1), filter 1s ease;
         }
 
         .signature {
@@ -413,13 +463,26 @@
             font-size: 14px;
             line-height: 1.55;
             opacity: 0;
-            transform: translateY(6px);
-            transition: opacity 0.6s ease 0.35s, transform 0.6s ease 0.35s;
+            transform: translateY(8px);
+            transition: opacity 0.25s ease, transform 0.25s ease;
         }
 
-        .card.open .signature {
+        /* Follows the wish badge with a short delay */
+        .card.open.wish-visible .signature {
             opacity: 1;
             transform: translateY(0);
+            transition: opacity 1s ease 0.7s, transform 1s cubic-bezier(0.22, 1, 0.36, 1) 0.7s;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .wish-badge,
+            .card.open.wish-visible .wish-badge,
+            .signature,
+            .card.open.wish-visible .signature {
+                transition-duration: 0.01s;
+                transition-delay: 0s;
+                filter: none;
+            }
         }
 
         /* ---------- CLOSE BUTTON ---------- */
@@ -501,7 +564,7 @@
                 </div>
 
                 <div class="wish-badge">
-                    ✨ Wishing you peace & happiness always
+                    <span aria-hidden="true">🕊️</span> Wishing you peace &amp; happiness always <span aria-hidden="true">💙</span>
                 </div>
 
                 <div class="signature">
@@ -577,6 +640,26 @@
                 placeholderEl.appendChild(p);
             });
 
+            // Key phrases to highlight while typing (must match the message text exactly)
+            const highlightPhrases = [
+                "Happy 25th birthday!",
+                "genuine peace, happiness",
+                "Take good care of yourself"
+            ];
+
+            // For every line, a per-character flag: true when that char belongs to a highlighted phrase
+            const highlightMap = fullMessage.map(line => {
+                const flags = new Array(line.length).fill(false);
+                highlightPhrases.forEach(phrase => {
+                    let idx = line.indexOf(phrase);
+                    while (idx !== -1) {
+                        for (let k = idx; k < idx + phrase.length; k++) flags[k] = true;
+                        idx = line.indexOf(phrase, idx + phrase.length);
+                    }
+                });
+                return flags;
+            });
+
             let typingTimer = null;
             let openDelayTimer = null;
 
@@ -586,6 +669,13 @@
                 openDelayTimer = null;
                 typingTimer = null;
                 typedMessageEl.innerHTML = '';
+                card.classList.remove('wish-visible');
+            }
+
+            function revealWish() {
+                if (card.classList.contains('open')) {
+                    card.classList.add('wish-visible');
+                }
             }
 
             function startTypewriter() {
@@ -604,11 +694,13 @@
 
                 let currentP = 0;
                 let currentChar = 0;
+                let hlSpan = null;
 
                 function typeNext() {
                     if (currentP >= fullMessage.length) {
                         caret.remove();
                         typingTimer = null;
+                        revealWish();
                         return;
                     }
 
@@ -619,7 +711,17 @@
                         if (caret.parentNode !== pEl) {
                             pEl.appendChild(caret);
                         }
-                        caret.insertAdjacentText('beforebegin', text[currentChar]);
+                        if (highlightMap[currentP][currentChar]) {
+                            if (!hlSpan) {
+                                hlSpan = document.createElement('span');
+                                hlSpan.className = 'hl';
+                                pEl.insertBefore(hlSpan, caret);
+                            }
+                            hlSpan.appendChild(document.createTextNode(text[currentChar]));
+                        } else {
+                            hlSpan = null;
+                            caret.insertAdjacentText('beforebegin', text[currentChar]);
+                        }
                         currentChar++;
 
                         const char = text[currentChar - 1];
@@ -631,11 +733,13 @@
                     } else {
                         currentP++;
                         currentChar = 0;
+                        hlSpan = null;
                         if (currentP < fullMessage.length) {
                             typingTimer = setTimeout(typeNext, 620);
                         } else {
                             caret.remove();
                             typingTimer = null;
+                            revealWish();
                         }
                     }
                 }
