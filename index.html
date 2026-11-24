@@ -520,6 +520,8 @@
 
     <canvas id="confettiCanvas"></canvas>
 
+    <audio id="birthdayAudio" src="https://github.com/Thura-28/hbd-enigyin/raw/refs/heads/main/happy-birthday.mp3" preload="auto" loop></audio>
+
     <script>
         (function () {
             const card = document.getElementById('card');
@@ -530,6 +532,8 @@
             const typedMessageEl = document.getElementById('typedMessage');
             const placeholderEl = document.getElementById('messagePlaceholder');
             const ageBadge = document.getElementById('ageBadge');
+            const birthdayAudio = document.getElementById('birthdayAudio');
+            birthdayAudio.loop = true;
 
             let animationFrame = null;
             let confettiActive = false;
@@ -837,6 +841,12 @@
                 card.removeAttribute('role');
                 closeWrap.classList.add('visible');
 
+                birthdayAudio.currentTime = 0;
+                const playPromise = birthdayAudio.play();
+                if (playPromise && typeof playPromise.catch === 'function') {
+                    playPromise.catch(() => {});
+                }
+
                 updateAge();
                 resetTypewriter();
                 openDelayTimer = setTimeout(() => {
@@ -852,6 +862,9 @@
                 card.setAttribute('role', 'button');
                 closeWrap.classList.remove('visible');
                 resetTypewriter();
+
+                birthdayAudio.pause();
+                birthdayAudio.currentTime = 0;
             }
 
             card.addEventListener('click', () => {
